@@ -4,16 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -28,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
@@ -40,9 +37,6 @@ public class SearchArtistActivityFragment extends Fragment {
     private ArrayList<ArtistListData> artistList;
     ListView artistView;
     private ProgressBar spinner;
-    private SpeechRecognizer mSpeechRecognizer;
-    private Intent mSpeechRecognizerIntent;
-    private at.markushi.ui.CircleButton voiceSearchButton;
     private FetchArtistTask task;
 
     public SearchArtistActivityFragment() {
@@ -51,26 +45,6 @@ public class SearchArtistActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(getActivity());
-        mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
-                getActivity().getPackageName());
-
-
-        SpeechRecognitionListener listener = new SpeechRecognitionListener();
-        mSpeechRecognizer.setRecognitionListener(listener);
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mSpeechRecognizer != null) {
-            mSpeechRecognizer.destroy();
-        }
     }
 
     @Override
@@ -146,16 +120,6 @@ public class SearchArtistActivityFragment extends Fragment {
         artistList = new ArrayList<>();
         artistView = (ListView) rootView.findViewById(R.id.artistListView);
         bindView();
-
-        // voice search
-        voiceSearchButton = (at.markushi.ui.CircleButton) rootView.findViewById(R.id.voiceSearchButton);
-        voiceSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-                spinner.setVisibility(View.VISIBLE);
-            }
-        });
 
         // open top 10 track view
         artistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -276,71 +240,27 @@ public class SearchArtistActivityFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = inflater.inflate(R.layout.artistlistview_layout, viewGroup, false);
+            if(convertView==null) {
+                convertView = inflater.inflate(R.layout.artistlistview_layout, viewGroup, false);
+            }
 
             // put artist image
-            de.hdodenhof.circleimageview.CircleImageView artistImageView = (de.hdodenhof.circleimageview.CircleImageView) row.findViewById(R.id.artistImage);
+            CircleImageView artistImageView =
+                    (de.hdodenhof.circleimageview.CircleImageView) convertView.findViewById(R.id.artistImage);
             artistImageView.setImageBitmap(null);
             String url = getItem(position).artistImage;
-            Picasso.with(row.getContext()).load(url).placeholder(R.drawable.ic_play).error(R.drawable.ic_play).into(artistImageView);
+            Picasso
+                .with(convertView.getContext())
+                .load(url)
+                .placeholder(R.drawable.ic_play)
+                .error(R.drawable.ic_play)
+                .into(artistImageView);
 
             // put artist name
-            TextView artistName = (TextView) row.findViewById(R.id.artistName);
+            TextView artistName = (TextView) convertView.findViewById(R.id.artistName);
             artistName.setText(getItem(position).artistName);
 
-            return row;
-        }
-    }
-
-    protected class SpeechRecognitionListener implements RecognitionListener {
-
-        @Override
-        public void onBeginningOfSpeech() {
-        }
-
-        @Override
-        public void onBufferReceived(byte[] buffer) {
-
-        }
-
-        @Override
-        public void onEndOfSpeech() {
-        }
-
-        @Override
-        public void onError(int error) {
-            mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-        }
-
-        @Override
-        public void onEvent(int eventType, Bundle params) {
-
-        }
-
-        @Override
-        public void onPartialResults(Bundle partialResults) {
-
-        }
-
-        @Override
-        public void onReadyForSpeech(Bundle params) {
-        }
-
-        @Override
-        public void onResults(Bundle results) {
-            spinner.setVisibility(View.GONE);
-            ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-            searchArtistEditText.setText("");
-            assert matches != null;
-            searchArtistEditText.setText(matches.get(0));
-            searchArtistEditText.setSelection(searchArtistEditText.getText().length());
-            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
-                    .showSoftInput(searchArtistEditText, InputMethodManager.SHOW_FORCED);
-            mSpeechRecognizer.cancel();
-        }
-
-        @Override
-        public void onRmsChanged(float rmsdB) {
+            return convertView;
         }
     }
 }

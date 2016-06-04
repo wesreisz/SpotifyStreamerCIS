@@ -1,3 +1,5 @@
+Update: This project is deprecated. Feel free to use this project as a learning source. Replace with your own keys. 64-bit android users will need to find 64-bit native libs to be able to run this on their device.
+
 # SpotifyStreamer
 
 1) Utilizes ffmpeg transcoder library to enable hardware acceleration for smooth and progressive streaming.<br/>

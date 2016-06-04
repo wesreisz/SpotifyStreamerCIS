@@ -16,21 +16,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/search_artists_edittext_hint"
         android:imeOptions="actionSearch"
-        android:inputType="text"
-        android:layout_toStartOf="@+id/voiceSearchButton" />
-
-    <at.markushi.ui.CircleButton
-        android:id="@+id/voiceSearchButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_mic"
-        app:cb_color="#FFFFFF"
-        app:cb_pressedRingWidth="2dip"
-        android:layout_alignBottom="@+id/searchArtistEditText"
-        android:layout_alignEnd="@+id/artistListView">
-
-        <requestFocus />
-    </at.markushi.ui.CircleButton>
+        android:inputType="text"/>
 
     <ListView
         android:id="@+id/artistListView"

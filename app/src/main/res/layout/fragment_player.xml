@@ -47,16 +47,6 @@
                 android:layout_marginTop="5dp"
                 android:src="@drawable/ic_play" />
 
-            <ImageButton
-                android:id="@+id/youTubeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/trackImage"
-                android:layout_alignStart="@+id/trackImage"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="20dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_youtube" />
         </RelativeLayout>
 
 
@@ -109,6 +99,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/ic_prev"
+                android:padding="15dp"
                 app:cb_color="#1B5E20"
                 app:cb_pressedRingWidth="10dip" />
 
@@ -116,6 +107,7 @@
                 android:id="@+id/playButton"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:padding="15dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="45dp"
@@ -129,6 +121,7 @@
                 android:id="@+id/nextButton"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:padding="15dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/ic_next"

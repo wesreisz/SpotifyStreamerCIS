@@ -99,7 +99,6 @@ public class PlayerActivityFragment extends Fragment {
         artistNameView = (TextView) rootView.findViewById(R.id.artistName);
         albumNameView = (TextView) rootView.findViewById(R.id.albumName);
         trackImageView = (ImageView) rootView.findViewById(R.id.trackImage);
-        youTubeButtonView = (ImageButton) rootView.findViewById(R.id.youTubeButton);
         trackNameView = (TextView) rootView.findViewById(R.id.trackName);
         currentDuration = (TextView) rootView.findViewById(R.id.currentDuration);
         seekBarView = (SeekBar) rootView.findViewById(R.id.seekBar);
@@ -188,17 +187,6 @@ public class PlayerActivityFragment extends Fragment {
                         // seek bar
                         seekBarView.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(palette.getMutedColor(android.R.color.black), PorterDuff.Mode.MULTIPLY));
                         // TODO: Add change color of thumb
-                    }
-                });
-
-                // search and link music video on youtube
-                // TODO: Disable youtube linkage on freeplayer
-                youTubeButtonView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        SearchVideoId searchVideoId = new SearchVideoId();
-                        searchVideoId.execute(TopTenTracksActivityFragment.topTenTrackList.get(songPosition).trackArtist + " " + TopTenTracksActivityFragment.topTenTrackList.get(songPosition).trackName);
                     }
                 });
             }
@@ -551,56 +539,6 @@ public class PlayerActivityFragment extends Fragment {
             setSeekBar();
         }
     };
-
-    // Search for music video in youtube
-    class SearchVideoId extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                youtube = new YouTube.Builder(new NetHttpTransport(),
-                        new JacksonFactory(), new HttpRequestInitializer() {
-                    @Override
-                    public void initialize(HttpRequest hr) throws IOException {
-                    }
-                }).setApplicationName(getActivity().getString(R.string.app_name)).build();
-
-                query = youtube.search().list("id");
-                query.setKey("AIzaSyDmD2n10SLAimt0Uv8pclhx8D1le50AV10");
-                query.setQ(params[0]);
-                query.setType("video");
-                query.setFields("items(id/videoId)");
-                query.setMaxResults(1l);
-
-                SearchListResponse response = query.execute();
-                List<SearchResult> results = response.getItems();
-                return results.get(0).getId().getVideoId();
-            } catch (Exception e) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (s != null) {
-
-                // pause currently running music
-                if (freePlayer != null) {
-                    freePlayer.pause();
-                }
-                if (premiumPlayer != null) {
-                    premiumPlayer.pause();
-                }
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + s));
-                startActivity(intent);
-
-            } else {
-                Toast.makeText(getActivity(), "Video not found!", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
     // for blurring image
     private Bitmap blurImage(Bitmap src, float r) {
