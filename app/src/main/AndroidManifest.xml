@@ -34,10 +34,6 @@
                 android:value="com.plusgaurav.spotifystreamer.SearchArtistActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".SearchArtistActivity" />
-        <activity
             android:name=".PlayerActivity"
             android:label="@string/title_activity_player"
             android:launchMode="singleTop"

@@ -127,6 +127,7 @@ public class TopTenTracksActivityFragment extends Fragment {
                 options.put("country", "US");
 
                 // search top 10 tracks of the artist
+                //https://developer.spotify.com/web-api/get-artists-top-tracks/
                 Tracks topTracks = spotify.getArtistTopTrack(artistId[0], options);
                 topTenTrackList.clear();
                 for (Track track : topTracks.tracks) {

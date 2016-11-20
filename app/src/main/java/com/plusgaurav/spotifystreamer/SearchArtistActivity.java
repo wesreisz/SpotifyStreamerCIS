@@ -15,7 +15,7 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 public class SearchArtistActivity extends AppCompatActivity{
 
-    protected static final String CLIENT_ID = "<replace with your clientid>";
+    protected static final String CLIENT_ID = "update-with-correct-client-id";
     private static final String REDIRECT_URI = "cis-music-player-login://callback";
 
     private static String accessToken;
