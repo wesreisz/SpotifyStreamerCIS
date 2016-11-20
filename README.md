@@ -1,3 +1,7 @@
+Credit: Originally cloned from https://github.com/gaurav91pandey/SpotifyStreamer
+
+Cleaned up for my referencing in class.
+
 Update: This project is deprecated. Feel free to use this project as a learning source. Replace with your own keys. 64-bit android users will need to find 64-bit native libs to be able to run this on their device.
 
 # SpotifyStreamer
